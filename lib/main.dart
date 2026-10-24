@@ -29,10 +29,12 @@ class _ColetaSeletivaAppState extends State<ColetaSeletivaApp> {
   void initState() {
     super.initState();
     widget.usuarioRepository.carregar().then((u) {
-      if (mounted) setState(() {
-        _usuario = u;
-        _carregando = false;
-      });
+      if (mounted) {
+        setState(() {
+          _usuario = u;
+          _carregando = false;
+        });
+      }
     });
   }
 
