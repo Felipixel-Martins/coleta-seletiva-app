@@ -25,15 +25,18 @@ class _CronogramaScreenState extends State<CronogramaScreen> {
     return Scaffold(
       appBar: AppBar(title: Text('Coleta - ${widget.bairro}')),
       body: _cronogramas.isEmpty
-          ? const Center(child: Text('Nenhum cronograma encontrado.'))
+          ? const Center(child: Text('Nenhum cronograma encontrado para este bairro.'))
           : ListView.builder(
               itemCount: _cronogramas.length,
               itemBuilder: (context, index) {
                 final c = _cronogramas[index];
-                return ListTile(
-                  leading: const Icon(Icons.delete_outline),
-                  title: Text(c.diaSemana),
-                  subtitle: Text('Horário: ${c.horario}'),
+                return Card(
+                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: ListTile(
+                    leading: const Icon(Icons.delete_outline, color: Colors.green),
+                    title: Text(c.diaSemana, style: const TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('Horário: ${c.horario}'),
+                  ),
                 );
               },
             ),

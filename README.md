@@ -1,16 +1,27 @@
-# coleta_seletiva_app
+# 📱 Coleta Seletiva Comunitária
 
-A new Flutter project.
+Aplicativo móvel desenvolvido em Flutter para auxiliar moradores na organização da coleta seletiva comunitária. Este projeto foi construído utilizando a abordagem **TDD (Test-Driven Development)** e gestão ágil com **Scrum**.
 
-## Getting Started
+## 🎯 O Problema e a Solução
+Muitos moradores não têm informação clara sobre os dias e horários da coleta seletiva, o que gera descarte irregular. O app resolve isso oferecendo:
+- Cronograma semanal de coleta por bairro.
+- Notificações (lembretes) configuráveis.
+- Canal direto para solicitar coleta extraordinária (lixo acumulado).
 
-This project is a starting point for a Flutter application.
+## 🛠️ Tecnologias Utilizadas
+- **Flutter (Dart)**: Desenvolvimento multiplataforma (foco em Android).
+- **TDD**: Testes escritos antes do código de produção.
+- **GitHub Actions**: Pipeline de Integração Contínua (CI).
+- **Shared Preferences**: Persistência de dados local.
+- **Scrum**: Metodologia ágil para organização das Sprints.
 
-A few resources to get you started if this is your first Flutter project:
+## 🚀 Como rodar o projeto localmente
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Pré-requisitos
+- Flutter SDK instalado (versão 3.38.10 ou superior).
+- Emulador Android ou navegador Chrome.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Passos
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/Felipixel-Martins/coleta-seletiva-app.git

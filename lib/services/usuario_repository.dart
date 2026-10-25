@@ -1,22 +1,38 @@
-import 'dart:convert';
-
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../models/usuario.dart';
 
-/// Persiste o usuário cadastrado localmente via shared_preferences.
 class UsuarioRepository {
-  static const _chave = 'usuario_cadastrado';
+  static const _kNome = 'nome';
+  static const _kEmail = 'email';
+  static const _kBairro = 'bairro';
 
+  // Métodos originais do seu teste da Sprint 1
   Future<void> salvar(Usuario usuario) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_chave, jsonEncode(usuario.toMap()));
+    await prefs.setString(_kNome, usuario.nome);
+    await prefs.setString(_kEmail, usuario.email);
+    await prefs.setString(_kBairro, usuario.bairro);
   }
 
   Future<Usuario?> carregar() async {
     final prefs = await SharedPreferences.getInstance();
-    final json = prefs.getString(_chave);
-    if (json == null) return null;
-    return Usuario.fromMap(jsonDecode(json) as Map<String, dynamic>);
+    final nome = prefs.getString(_kNome);
+    final email = prefs.getString(_kEmail);
+    final bairro = prefs.getString(_kBairro);
+
+    if (nome == null || email == null || bairro == null) return null;
+    return Usuario(nome: nome, email: email, bairro: bairro);
   }
+
+  Future<void> limpar() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_kNome);
+    await prefs.remove(_kEmail);
+    await prefs.remove(_kBairro);
+  }
+
+  // --- Apelidos para o main.dart novo que fizemos ---
+  Future<void> salvarUsuario(Usuario usuario) => salvar(usuario);
+  Future<Usuario?> obterUsuario() => carregar();
+  Future<void> limparUsuario() => limpar();
 }

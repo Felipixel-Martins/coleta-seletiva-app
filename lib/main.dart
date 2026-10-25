@@ -1,64 +1,69 @@
 import 'package:flutter/material.dart';
-
-import 'data/bairros.dart';
 import 'models/usuario.dart';
 import 'screens/cadastro_screen.dart';
+import 'screens/home_screen.dart';
 import 'services/usuario_repository.dart';
-import 'theme/app_theme.dart';
+import 'app_theme.dart'; // Certifique-se de que este arquivo existe
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(ColetaSeletivaApp(usuarioRepository: UsuarioRepository()));
+  final repository = UsuarioRepository();
+  final usuarioSalvo = await repository.obterUsuario();
+  
+  runApp(MyApp(usuarioInicial: usuarioSalvo));
 }
 
-/// Widget raiz do aplicativo Coleta Seletiva Comunitária.
-class ColetaSeletivaApp extends StatefulWidget {
-  final UsuarioRepository usuarioRepository;
-
-  const ColetaSeletivaApp({super.key, required this.usuarioRepository});
+class MyApp extends StatefulWidget {
+  final Usuario? usuarioInicial;
+  const MyApp({super.key, this.usuarioInicial});
 
   @override
-  State<ColetaSeletivaApp> createState() => _ColetaSeletivaAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
-class _ColetaSeletivaAppState extends State<ColetaSeletivaApp> {
-  Usuario? _usuario;
-  bool _carregando = true;
+class _MyAppState extends State<MyApp> {
+  Usuario? _usuarioAtual;
+  final UsuarioRepository _repository = UsuarioRepository();
+  
+  // Lista de bairros que o app suporta
+  final List<String> _bairros = ['Centro', 'Fazenda', 'Cordeiros'];
 
   @override
   void initState() {
     super.initState();
-    widget.usuarioRepository.carregar().then((u) {
-      if (mounted) {
-        setState(() {
-          _usuario = u;
-          _carregando = false;
-        });
-      }
+    _usuarioAtual = widget.usuarioInicial;
+  }
+
+  Future<void> _salvarUsuario(Usuario usuario) async {
+    await _repository.salvarUsuario(usuario);
+    setState(() {
+      _usuarioAtual = usuario;
     });
   }
 
-  Future<void> _aoCadastrar(Usuario usuario) async {
-    await widget.usuarioRepository.salvar(usuario);
-    setState(() => _usuario = usuario);
+  void _logout() async {
+    await _repository.limparUsuario();
+    setState(() {
+      _usuarioAtual = null;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Coleta Seletiva Comunitária',
+      title: 'Coleta Seletiva',
+      theme: appTheme,
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.claro,
-      home: _carregando
-          ? const Scaffold(body: Center(child: CircularProgressIndicator()))
-          : _usuario == null
-              ? CadastroScreen(bairros: bairrosAtendidos, onCadastrar: _aoCadastrar)
-              : Scaffold(
-                  appBar: AppBar(title: const Text('Coleta Seletiva')),
-                  body: Center(
-                    child: Text('Olá, ${_usuario!.nome}! Bairro: ${_usuario!.bairro}'),
-                  ),
-                ),
+      home: _usuarioAtual == null
+          ? CadastroScreen(
+              bairros: _bairros,
+              onCadastrar: _salvarUsuario,
+            )
+          : HomeScreen(
+              nomeUsuario: _usuarioAtual!.nome,
+              bairro: _usuarioAtual!.bairro,
+              onLogout: _logout,
+            ),
     );
   }
 }
