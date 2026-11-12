@@ -60,7 +60,6 @@ class _CadastroScreenState extends State<CadastroScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Cabeçalho com Gradiente
             Container(
               width: double.infinity,
               padding: const EdgeInsets.only(top: 80, bottom: 40, left: 24, right: 24),
@@ -92,8 +91,6 @@ class _CadastroScreenState extends State<CadastroScreen> {
                 ],
               ),
             ),
-            
-            // Formulário flutuante
             Transform.translate(
               offset: const Offset(0, -30),
               child: Padding(
@@ -113,6 +110,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                         ),
                         const SizedBox(height: 24),
                         TextField(
+                          key: const Key('campoNome'),
                           controller: _nomeController,
                           textCapitalization: TextCapitalization.words,
                           decoration: const InputDecoration(
@@ -123,6 +121,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                         ),
                         const SizedBox(height: 16),
                         TextField(
+                          key: const Key('campoEmail'),
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
@@ -137,6 +136,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                         ),
                         const SizedBox(height: 16),
                         DropdownButtonFormField<String>(
+                          key: const Key('dropdownBairro'),
                           initialValue: _bairroSelecionado,
                           decoration: const InputDecoration(
                             labelText: 'Selecione seu Bairro',
@@ -151,6 +151,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                         ),
                         const SizedBox(height: 32),
                         ElevatedButton(
+                          key: const Key('botaoCadastrar'),
                           onPressed: _formularioValido ? _cadastrar : null,
                           child: const Text('Começar'),
                         ),
