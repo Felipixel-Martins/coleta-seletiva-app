@@ -1,2 +1,10 @@
-/// Bairros atendidos pela coleta seletiva (dados mockados do MVP).
-const List<String> bairrosAtendidos = ['Centro', 'Fazenda', 'Cordeiros'];
+const List<String> bairrosItajai = [
+  'Centro',
+  'Fazenda',
+  'Cordeiros',
+  'Praia Brava',
+  'Cabeçudas',
+  'São Vicente',
+  'Limoeiro',
+  'Barra do Rio'
+];

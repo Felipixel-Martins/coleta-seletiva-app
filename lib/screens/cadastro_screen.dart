@@ -1,12 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-
 import '../models/usuario.dart';
 
-/// Tela de cadastro simplificado: nome, e-mail e bairro.
-///
-/// O botão "Cadastrar" só é habilitado quando nome e e-mail são válidos.
 class CadastroScreen extends StatefulWidget {
   final List<String> bairros;
   final FutureOr<void> Function(Usuario usuario) onCadastrar;
@@ -61,72 +56,109 @@ class _CadastroScreenState extends State<CadastroScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final tema = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Cadastro')),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(24),
+      body: SingleChildScrollView(
+        child: Column(
           children: [
-            Icon(Icons.recycling, size: 72, color: tema.colorScheme.primary),
-            const SizedBox(height: 12),
-            Text(
-              'Coleta Seletiva Comunitária',
-              textAlign: TextAlign.center,
-              style: tema.textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Informe seus dados para ver a coleta do seu bairro.',
-              textAlign: TextAlign.center,
-              style: tema.textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 32),
-            TextField(
-              key: const Key('campoNome'),
-              controller: _nomeController,
-              textCapitalization: TextCapitalization.words,
-              decoration: const InputDecoration(
-                labelText: 'Nome',
-                prefixIcon: Icon(Icons.person_outline),
+            // Cabeçalho com Gradiente
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.only(top: 80, bottom: 40, left: 24, right: 24),
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xFF1B5E20), Color(0xFF4CAF50)],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(32),
+                  bottomRight: Radius.circular(32),
+                ),
               ),
-              onChanged: (_) => setState(() {}),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              key: const Key('campoEmail'),
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                labelText: 'E-mail',
-                prefixIcon: const Icon(Icons.email_outlined),
-                errorText: _emailController.text.isNotEmpty &&
-                        !Usuario.emailValido(_emailController.text)
-                    ? 'Informe um e-mail válido'
-                    : null,
+              child: const Column(
+                children: [
+                  Icon(Icons.recycling, size: 80, color: Colors.white),
+                  SizedBox(height: 16),
+                  Text(
+                    'Coleta Seletiva',
+                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Sua comunidade mais limpa e organizada.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16, color: Colors.white70),
+                  ),
+                ],
               ),
-              onChanged: (_) => setState(() {}),
             ),
-            const SizedBox(height: 16),
-            DropdownButtonFormField<String>(
-              key: const Key('dropdownBairro'),
-              initialValue: _bairroSelecionado,
-              decoration: const InputDecoration(
-                labelText: 'Bairro',
-                prefixIcon: Icon(Icons.location_on_outlined),
+            
+            // Formulário flutuante
+            Transform.translate(
+              offset: const Offset(0, -30),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Card(
+                  elevation: 8,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Text(
+                          'Crie sua conta',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 24),
+                        TextField(
+                          controller: _nomeController,
+                          textCapitalization: TextCapitalization.words,
+                          decoration: const InputDecoration(
+                            labelText: 'Nome completo',
+                            prefixIcon: Icon(Icons.person_outline),
+                          ),
+                          onChanged: (_) => setState(() {}),
+                        ),
+                        const SizedBox(height: 16),
+                        TextField(
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                            labelText: 'E-mail',
+                            prefixIcon: const Icon(Icons.email_outlined),
+                            errorText: _emailController.text.isNotEmpty &&
+                                    !Usuario.emailValido(_emailController.text)
+                                ? 'E-mail inválido'
+                                : null,
+                          ),
+                          onChanged: (_) => setState(() {}),
+                        ),
+                        const SizedBox(height: 16),
+                        DropdownButtonFormField<String>(
+                          initialValue: _bairroSelecionado,
+                          decoration: const InputDecoration(
+                            labelText: 'Selecione seu Bairro',
+                            prefixIcon: Icon(Icons.location_on_outlined),
+                          ),
+                          items: widget.bairros
+                              .map((b) => DropdownMenuItem(value: b, child: Text(b)))
+                              .toList(),
+                          onChanged: (valor) {
+                            if (valor != null) setState(() => _bairroSelecionado = valor);
+                          },
+                        ),
+                        const SizedBox(height: 32),
+                        ElevatedButton(
+                          onPressed: _formularioValido ? _cadastrar : null,
+                          child: const Text('Começar'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-              items: widget.bairros
-                  .map((b) => DropdownMenuItem(value: b, child: Text(b)))
-                  .toList(),
-              onChanged: (valor) {
-                if (valor != null) setState(() => _bairroSelecionado = valor);
-              },
-            ),
-            const SizedBox(height: 32),
-            ElevatedButton(
-              key: const Key('botaoCadastrar'),
-              onPressed: _formularioValido ? _cadastrar : null,
-              child: const Text('Cadastrar'),
             ),
           ],
         ),

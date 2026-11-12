@@ -3,7 +3,8 @@ import 'models/usuario.dart';
 import 'screens/cadastro_screen.dart';
 import 'screens/home_screen.dart';
 import 'services/usuario_repository.dart';
-import 'app_theme.dart'; // Certifique-se de que este arquivo existe
+import 'app_theme.dart'; 
+import 'data/bairros.dart'; // Importando o novo arquivo
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,8 +26,8 @@ class _MyAppState extends State<MyApp> {
   Usuario? _usuarioAtual;
   final UsuarioRepository _repository = UsuarioRepository();
   
-  // Lista de bairros que o app suporta
-  final List<String> _bairros = ['Centro', 'Fazenda', 'Cordeiros'];
+  // Usando a lista importada do arquivo bairros.dart
+  final List<String> _bairros = bairrosItajai;
 
   @override
   void initState() {

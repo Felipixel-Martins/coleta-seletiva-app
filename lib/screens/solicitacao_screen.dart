@@ -34,7 +34,7 @@ class _SolicitacaoScreenState extends State<SolicitacaoScreen> {
 
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Solicitação enviada com sucesso!')),
+      const SnackBar(content: Text('Solicitação registrada com sucesso!'), backgroundColor: Colors.green),
     );
     Navigator.pop(context);
   }
@@ -49,16 +49,34 @@ class _SolicitacaoScreenState extends State<SolicitacaoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Solicitar Coleta Extra')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      appBar: AppBar(title: const Text('Nova Solicitação')),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(24.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            const Icon(Icons.report_problem, size: 64, color: Colors.orange),
+            const SizedBox(height: 16),
+            const Text(
+              'Relatar acúmulo irregular',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Preencha os dados abaixo para solicitar uma coleta extraordinária na sua região.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+            ),
+            const SizedBox(height: 32),
+            
             TextField(
               controller: _motivoController,
+              maxLines: 2,
               decoration: const InputDecoration(
-                labelText: 'Motivo (ex: Lixo acumulado)',
-                border: OutlineInputBorder(),
+                labelText: 'Qual o problema?',
+                hintText: 'Ex: Lixo acumulado na esquina',
+                prefixIcon: Icon(Icons.description),
               ),
             ),
             const SizedBox(height: 16),
@@ -66,17 +84,16 @@ class _SolicitacaoScreenState extends State<SolicitacaoScreen> {
               controller: _enderecoController,
               decoration: const InputDecoration(
                 labelText: 'Endereço completo',
-                border: OutlineInputBorder(),
+                hintText: 'Rua, número, ponto de referência',
+                prefixIcon: Icon(Icons.location_on),
               ),
             ),
-            const SizedBox(height: 24),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _isValido ? _enviar : null,
-                style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(16)),
-                child: const Text('Enviar Solicitação'),
-              ),
+            const SizedBox(height: 32),
+            
+            ElevatedButton(
+              onPressed: _isValido ? _enviar : null,
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
+              child: const Text('Enviar Solicitação'),
             ),
           ],
         ),
